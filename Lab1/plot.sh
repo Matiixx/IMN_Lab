@@ -33,4 +33,4 @@ plot "rk40.01_diff.csv" u 1:2 w l lw 1 t 'dt = 0.01s', "rk40.10_diff.csv" u 1:2 
 
 set title "RLC"
 set out "../rrz2.jpeg"
-plot "rrz2_50.00.csv" u 1:2 w l lw 1 t 'Q(t) omega = 0.5', "" u 1:3 w l lw 1 t 'I(t) omega = 0.5', "rrz2_80.00.csv" u 1:2 w l lw 1 t 'Q(t) omega = 0.8', "" u 1:3 w l lw 1 t 'I(t) omega = 0.8', "rrz2_100.00.csv" u 1:2 w l lw 1 t 'Q(t) omega = 1.0', "" u 1:3 w l lw 1 t 'I(t) omega = 1.0', "rrz2_120.00.csv" u 1:2 w l lw 1 t 'Q(t) omega = 1.2', "" u 1:3 w l lw 1 t 'I(t) omega = 1.2'
+plot "rrz2_50.00.csv" u 1:2 w l lw 1 t 'Q(t) omega = 0.5', "" u 1:3 w l lw 2 t 'I(t) omega = 0.5', "rrz2_80.00.csv" u 1:2 w l lw 1 t 'Q(t) omega = 0.8', "" u 1:3 w l lw 2 t 'I(t) omega = 0.8', "rrz2_100.00.csv" u 1:2 w l lw 1 t 'Q(t) omega = 1.0', "" u 1:3 w l lw 2 t 'I(t) omega = 1.0', "rrz2_120.00.csv" u 1:2 w l lw 1 t 'Q(t) omega = 1.2', "" u 1:3 w l lw 2 t 'I(t) omega = 1.2'
