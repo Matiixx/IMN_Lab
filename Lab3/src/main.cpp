@@ -99,10 +99,12 @@ struct method
 };
 
 method methodArray[] = {
-    {metodaTrapezow, "metoda_trapezow"},
-    {metodaRK2, "metoda_rk2"}};
+    {metodaRK2, "metoda_rk2"},
+    {metodaTrapezow, "metoda_trapezow"}
 
-void kkc(method schemat_numeryczny, const double &tol)
+};
+
+void solve(method schemat_numeryczny, const double &tol)
 {
   double t = 0,
          x0 = 0.01,
@@ -147,9 +149,9 @@ void kkc(method schemat_numeryczny, const double &tol)
 
 int main()
 {
-  kkc(methodArray[0], TOL[0]);
-  kkc(methodArray[0], TOL[1]);
-  kkc(methodArray[1], TOL[0]);
-  kkc(methodArray[1], TOL[1]);
+  solve(methodArray[0], TOL[0]);
+  solve(methodArray[0], TOL[1]);
+  solve(methodArray[1], TOL[0]);
+  solve(methodArray[1], TOL[1]);
   return 0;
 }
