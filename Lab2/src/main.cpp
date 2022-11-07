@@ -39,7 +39,7 @@ void picard()
   const double gamma = 0.1;
   const double t_max = 100.0;
   const double dt = 0.1;
-  const double TOL = 10e-6;
+  const double TOL = 1e-6;
   const int mi = 20;
   const double alfa = beta * N - gamma;
   const int iter = t_max / dt;
@@ -59,7 +59,7 @@ void picard()
     u_next = 0.0;
     curr_mi = 0;
 
-    while (std::abs(u_next - u_prev) >= TOL && curr_mi <= mi)
+    while (fabs(u_next - u_prev) >= TOL && curr_mi <= mi)
     {
       if (curr_mi != 0)
         u_prev = u_next;
@@ -78,7 +78,7 @@ void newton()
   const double gamma = 0.1;
   const double t_max = 100.0;
   const double dt = 0.1;
-  const double TOL = 10e-6;
+  const double TOL = 1e-6;
   const int mi = 20;
   const double alfa = beta * N - gamma;
   const int iter = t_max / dt;
@@ -97,7 +97,7 @@ void newton()
     u_prev = newton_array[i - 1];
     u_next = 0.0;
     curr_mi = 0;
-    while (std::abs(u_next - u_prev) >= TOL && curr_mi <= mi)
+    while (fabs(u_next - u_prev) >= TOL && curr_mi <= mi)
     {
       if (curr_mi != 0)
         u_prev = u_next;
@@ -142,7 +142,7 @@ void rk2()
   const double gamma = 0.1;
   const double t_max = 100.0;
   const double dt = 0.1;
-  const double TOL = 10e-6;
+  const double TOL = 1e-6;
   const int mi = 20;
   const double alfa = beta * N - gamma;
   const int iter = t_max / dt;
@@ -151,7 +151,7 @@ void rk2()
       {0.25, 0.25 - sqrt(3) / 6.0},
       {0.25 + sqrt(3) / 6.0, 0.25}};
   const double b[2] = {0.5, 0.5};
-  const double c[2] = {a[0][1], a[1][0]};
+  const double c[2] = {0.5 - sqrt(3) / 6, 0.5 + sqrt(3) / 6};
 
   std::string filename = "rk2.dat";
   clearFile(filename);
