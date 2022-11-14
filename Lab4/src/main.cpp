@@ -110,10 +110,16 @@ void globalRelaxation()
     std::vector<std::vector<double>> Vs{};
     std::vector<std::vector<double>> Vn{};
     int iter = 0;
-    double S_prev{100};
-    double S{100};
-    initVector(Vs, 10.0);
-    initVector(Vn, 10.0);
+    double S_prev{};
+    double S{};
+    initVector(Vs);
+    initVector(Vn);
+
+    for (int j = 0; j <= nx; j++)
+    {
+      Vs[j][0] = 10.0;
+      Vn[j][0] = 10.0;
+    }
 
     std::stringstream ss;
     ss.str("");
