@@ -62,13 +62,13 @@ double rho(const double &x, const double &y)
   return rho_1(delta * x, delta * y) + rho_2(delta * x, delta * y);
 }
 
-void initVector(std::vector<std::vector<double>> &vec)
+void initVector(std::vector<std::vector<double>> &vec, const double &v = 0.0)
 {
   for (int i = 0; i <= nx; i++)
   {
     std::vector<double> tmp;
     for (int j = 0; j <= ny; j++)
-      tmp.push_back(0.0);
+      tmp.push_back(v);
     vec.push_back(tmp);
   }
 }
