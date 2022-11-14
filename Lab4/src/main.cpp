@@ -54,7 +54,7 @@ double rho_1(const double &x, const double &y)
 
 double rho_2(const double &x, const double &y)
 {
-  return -std::exp(-((x - 0.65 * x_max) * (x - 0.35 * x_max)) / (sigma_x * sigma_x) - ((y - 0.5 * y_max) * (y - 0.5 * y_max)) / (sigma_y * sigma_y));
+  return -std::exp(-((x - 0.65 * x_max) * (x - 0.65 * x_max)) / (sigma_x * sigma_x) - ((y - 0.5 * y_max) * (y - 0.5 * y_max)) / (sigma_y * sigma_y));
 }
 
 double rho(const double &x, const double &y)
