@@ -20,6 +20,14 @@ void saveToFile(const std::string &f, const double &a, const double &b)
   file.close();
 }
 
+void saveToFile(const std::string &f, const double &a, const double &b, const double &c)
+{
+  std::fstream file;
+  file.open(f, std::ios::app);
+  file << a << " " << b << " " << c << "\n";
+  file.close();
+}
+
 void saveToFile(const std::string &f, const double &a, const double &b, const double &c, const double &d)
 {
   std::fstream file;
