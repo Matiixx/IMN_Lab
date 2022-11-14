@@ -64,6 +64,16 @@ void initVector(std::vector<std::vector<double>> &vec)
     vec.push_back(tmp);
   }
 }
+
+void printVector(std::vector<std::vector<double>> &vec)
+{
+  for (int i = 0; i < nx; i++)
+  {
+    for (int j = 0; j < ny; j++)
+      std::cout << vec[i][j] << " ";
+  }
+}
+
 int main()
 {
   globalRelaxation();
