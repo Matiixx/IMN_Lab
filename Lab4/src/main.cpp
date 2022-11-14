@@ -162,6 +162,19 @@ void globalRelaxation()
 
       iter++;
     }
+
+    ss.str("");
+    ss.clear();
+    ss << "global_v_" << omega_g << ".dat";
+    filename = ss.str();
+    clearFile(filename);
+    for (int i = 0; i <= nx; i++)
+    {
+      for (int j = 0; j <= ny; j++)
+      {
+        saveToFile(filename, i * delta, j * delta, Vn[i][j]);
+      }
+    }
   }
 }
 
