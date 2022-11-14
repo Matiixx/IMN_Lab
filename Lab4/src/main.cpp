@@ -158,7 +158,7 @@ void globalRelaxation()
 
       if (iter % 2000 == 0)
       {
-        std::cout << "Omega: " << omega_g << " iter: " << iter << " S: " << S << "\n";
+        std::cout << "Omega: " << omega_g << " iter: " << iter << " S: " << S << " Stop: " << std::fabs((S - S_prev) / S_prev) << "\n";
       }
 
       saveToFile(filename, iter, S);
