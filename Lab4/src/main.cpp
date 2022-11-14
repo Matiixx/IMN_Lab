@@ -124,7 +124,7 @@ void globalRelaxation()
     std::stringstream ss;
     ss.str("");
     ss.clear();
-    ss << "global_" << omega_g << ".dat";
+    ss << "global_s_" << omega_g << ".dat";
     std::string filename = ss.str();
     clearFile(filename);
 
