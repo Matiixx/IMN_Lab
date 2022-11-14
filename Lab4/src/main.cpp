@@ -39,6 +39,21 @@ const double epsilon = 1,
              sigma_x = 0.1 * x_max,
              sigma_y = 0.1 * y_max;
 
+double rho_1(const double &x, const double &y)
+{
+  return std::exp(-((x - 0.35 * x_max) * (x - 0.35 * x_max)) / (sigma_x * sigma_x) - ((y - 0.5 * y_max) * (y - 0.5 * y_max)) / (sigma_y * sigma_y));
+}
+
+double rho_2(const double &x, const double &y)
+{
+  return -std::exp(-((x - 0.65 * x_max) * (x - 0.35 * x_max)) / (sigma_x * sigma_x) - ((y - 0.5 * y_max) * (y - 0.5 * y_max)) / (sigma_y * sigma_y));
+}
+
+double rho(const double &x, const double &y)
+{
+  return rho_1(delta * x, delta * y) + rho_2(delta * x, delta * y);
+}
+
 int main()
 {
   globalRelaxation();
