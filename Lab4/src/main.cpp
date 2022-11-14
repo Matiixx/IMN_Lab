@@ -105,21 +105,22 @@ void globalRelaxation()
   double V = 0;
   const double TOL = 1e-8;
 
-  std::vector<std::vector<double>> Vs{};
-  std::vector<std::vector<double>> Vn{};
-
   for (const auto &omega_g : omega_G_array)
   {
-    std::stringstream ss;
-    ss << "global_" << omega_g << ".dat";
-    std::string filename = ss.str();
-    clearFile(filename);
+    std::vector<std::vector<double>> Vs{};
+    std::vector<std::vector<double>> Vn{};
     int iter = 0;
     double S_prev{100};
     double S{100};
+    initVector(Vs, 10.0);
+    initVector(Vn, 10.0);
 
-    initVector(Vs);
-    initVector(Vn);
+    std::stringstream ss;
+    ss.str("");
+    ss.clear();
+    ss << "global_" << omega_g << ".dat";
+    std::string filename = ss.str();
+    clearFile(filename);
 
     while (true)
     {
@@ -134,8 +135,8 @@ void globalRelaxation()
 
       for (int j = 1; j <= ny - 1; j++)
       {
-        Vn[0][j] = Vn[1][j];
         Vn[nx][j] = Vn[nx - 1][j];
+        Vn[0][j] = Vn[1][j];
       }
 
       for (int i = 0; i <= nx; i++)
