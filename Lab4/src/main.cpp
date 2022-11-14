@@ -91,6 +91,71 @@ double calcS(const std::vector<std::vector<double>> &V)
   return S;
 }
 
+void globalRelaxation()
+{
+  const double omega_G_array[] = {0.6};
+  double V = 0;
+  const double TOL = 1e-8;
+
+  std::vector<std::vector<double>> Vs{};
+  std::vector<std::vector<double>> Vn{};
+
+  for (const auto &omega_g : omega_G_array)
+  {
+    std::stringstream ss;
+    ss << "global_" << omega_g << ".dat";
+    std::string filename = ss.str();
+    clearFile(filename);
+    int iter = 0;
+    double S_prev{100};
+    double S{100};
+
+    initVector(Vs);
+    initVector(Vn);
+
+    while (true)
+    {
+      for (int i = 1; i <= nx - 1; i++)
+      {
+        for (int j = 1; j <= ny - 1; j++)
+        {
+          Vn[i][j] = 0.25 * (Vs[i + 1][j] + Vs[i - 1][j] + Vs[i][j + 1] + Vs[i][j - 1] +
+                             ((delta * delta) / epsilon) * rho(i, j));
+        }
+      }
+
+      for (int j = 1; j <= ny - 1; j++)
+      {
+        Vn[0][j] = Vn[1][j];
+        Vn[nx][j] = Vn[nx - 1][j];
+      }
+
+      for (int i = 0; i <= nx; i++)
+      {
+        for (int j = 0; j <= ny; j++)
+        {
+          Vs[i][j] = (1.0 - omega_g) * Vs[i][j] + omega_g * Vn[i][j];
+        }
+      }
+
+      S_prev = S;
+      S = calcS(Vn);
+
+      if (iter % 2000 == 0)
+      {
+        std::cout << "Omega: " << omega_g << " iter: " << iter << " S: " << S << "\n";
+      }
+
+      saveToFile(filename, iter, S);
+
+      if (std::fabs((S - S_prev) / S_prev) < TOL)
+        break;
+
+      iter++;
+    }
+  }
+}
+
 int main()
 {
   globalRelaxation();
