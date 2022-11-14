@@ -74,6 +74,23 @@ void printVector(std::vector<std::vector<double>> &vec)
   }
 }
 
+double calcS(const std::vector<std::vector<double>> &V)
+{
+  double S{};
+  for (int i = 0; i < nx - 1; i++)
+  {
+    for (int j = 0; j < ny - 1; j++)
+    {
+      S += (delta * delta) *
+           (0.5 * ((V[i + 1][j] - V[i][j]) / delta) * ((V[i + 1][j] - V[i][j]) / delta) +
+            0.5 * ((V[i][j + 1] - V[i][j]) / delta) * ((V[i][j + 1] - V[i][j]) / delta) -
+            rho(i, j) *
+                V[i][j]);
+    }
+  }
+  return S;
+}
+
 int main()
 {
   globalRelaxation();
