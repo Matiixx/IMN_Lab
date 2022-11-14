@@ -101,7 +101,7 @@ double calcS(const std::vector<std::vector<double>> &V)
 
 void globalRelaxation()
 {
-  const double omega_G_array[] = {0.6};
+  const double omega_G_array[] = {0.6, 1.0};
   double V = 0;
   const double TOL = 1e-8;
 
