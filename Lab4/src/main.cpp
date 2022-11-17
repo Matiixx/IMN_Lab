@@ -36,12 +36,12 @@ void saveToFile(const std::string &f, const double &a, const double &b, const do
   file.close();
 }
 
-const double epsilon = 1,
+const double epsilon = 1.0,
              delta = 0.1,
              nx = 150,
              ny = 100,
-             V1 = 10,
-             V2 = 0,
+             V1 = 10.0,
+             V2 = 0.0,
              x_max = delta * nx,
              y_max = delta * ny,
              sigma_x = 0.1 * x_max,
