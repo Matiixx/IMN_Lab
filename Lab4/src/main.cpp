@@ -182,7 +182,75 @@ void globalRelaxation()
         saveToFile(filename, i * delta, j * delta, Vn[i][j]);
   }
 }
+
+void localRelaxation()
+{
+  const double omega_G_array[] = {1.0, 1.4, 1.8, 1.9};
+  std::stringstream ss;
+
+  std::vector<std::vector<double>> density{};
+  initVector(density);
+  for (int i = 1; i < nx; i++)
+    for (int j = 1; j < ny; j++)
+      density[i][j] = rho(i, j);
+
+  for (const auto &omega_g : omega_G_array)
+  {
+    std::vector<std::vector<double>> V{};
+
+    int iter = 0;
+    double S_prev{};
+    double S{};
+    initVector(V);
+
+    for (int j = 0; j <= nx; j++)
+    {
+      V[j][0] = V1;
+    }
+
+    ss.str("");
+    ss.clear();
+    ss << "local_s_" << omega_g << ".dat";
+    std::string filename = ss.str();
+    clearFile(filename);
+
+    const double omega_min_1 = 1 - omega_g;
+    const double omega_4 = omega_g * 0.25;
+    const double dde = (delta * delta) / epsilon;
+
+    while (true)
+    {
+      for (int i = 1; i < nx; i++)
+      {
+        for (int j = 1; j < ny; j++)
+        {
+          V[i][j] = omega_min_1 * V[i][j] +
+                    omega_4 *
+                        (V[i + 1][j] + V[i - 1][j] + V[i][j - 1] + V[i][j + 1] + dde * density[i][j]);
+        }
       }
+
+      for (int j = 1; j < ny; j++)
+      {
+        V[0][j] = V[1][j];
+        V[nx][j] = V[nx - 1][j];
+      }
+
+      S_prev = S;
+      S = calcS(V);
+
+      if (iter % 5000 == 0)
+        std::cout << "Omega: " << omega_g << " iter: " << iter << " S: " << S << " Stop: " << std::fabs((S - S_prev) / S_prev) << "\n";
+
+      saveToFile(filename, iter, S);
+
+      if (std::fabs((S - S_prev) / S_prev) < TOL)
+      {
+        std::cout << "Omega: " << omega_g << " stop iteration at: " << iter << "\n";
+        break;
+      }
+
+      iter++;
     }
   }
 }
@@ -190,5 +258,6 @@ void globalRelaxation()
 int main()
 {
   globalRelaxation();
+  localRelaxation();
   return 0;
 }
