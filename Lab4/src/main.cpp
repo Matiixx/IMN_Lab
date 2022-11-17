@@ -45,7 +45,8 @@ const double epsilon = 1.0,
              x_max = delta * nx,
              y_max = delta * ny,
              sigma_x = 0.1 * x_max,
-             sigma_y = 0.1 * y_max;
+             sigma_y = 0.1 * y_max,
+             TOL = 1e-8;
 
 double rho_1(const double &x, const double &y)
 {
@@ -103,7 +104,6 @@ void globalRelaxation()
 {
   const double omega_G_array[] = {0.6, 1.0};
   double V = 0;
-  const double TOL = 1e-8;
 
   for (const auto &omega_g : omega_G_array)
   {
