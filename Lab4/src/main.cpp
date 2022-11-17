@@ -104,6 +104,13 @@ void globalRelaxation()
 {
   const double omega_G_array[] = {0.6, 1.0};
   double V = 0;
+  std::vector<std::vector<double>> density{};
+
+  initVector(density);
+  for (int i = 1; i < nx; i++)
+    for (int j = 1; j < ny; j++)
+      density[i][j] = rho(i, j);
+
 
   for (const auto &omega_g : omega_G_array)
   {
