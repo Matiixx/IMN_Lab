@@ -100,6 +100,13 @@ double calcS(const std::vector<std::vector<double>> &V)
   return S;
 }
 
+double calcErr(const std::vector<std::vector<double>> &V, const int &i, const int &j)
+{
+  return ((V[i + 1][j] - 2.0 * V[i][j] + V[i - 1][j]) / (delta * delta) +
+          (V[i][j + 1] - 2.0 * V[i][j] + V[i][j - 1]) / (delta * delta)) +
+         rho(i, j) / epsilon;
+}
+
 void globalRelaxation()
 {
   const double omega_G_array[] = {0.6, 1.0};
@@ -176,10 +183,20 @@ void globalRelaxation()
     ss.clear();
     ss << "global_v_" << omega_g << ".dat";
     filename = ss.str();
+    ss.str("");
+    ss.clear();
+    ss << "global_v_" << omega_g << "_error"
+       << ".dat";
+    std::string filename2 = ss.str();
+
     clearFile(filename);
-    for (int i = 0; i <= nx; i++)
-      for (int j = 0; j <= ny; j++)
+    clearFile(filename2);
+    for (int i = 1; i < nx; i++)
+      for (int j = 1; j < ny; j++)
+      {
         saveToFile(filename, i * delta, j * delta, Vn[i][j]);
+        saveToFile(filename2, i * delta, j * delta, calcErr(Vn, i, j));
+      }
   }
 }
 
