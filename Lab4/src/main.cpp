@@ -130,7 +130,6 @@ void globalRelaxation()
       Vn[j][0] = V1;
     }
 
-    std::stringstream ss;
     ss.str("");
     ss.clear();
     ss << "global_s_" << omega_g << ".dat";
