@@ -86,9 +86,9 @@ void printVector(std::vector<std::vector<double>> &vec)
 double calcS(const std::vector<std::vector<double>> &V)
 {
   double S{};
-  for (int i = 0; i < nx - 1; i++)
+  for (int i = 0; i < nx; i++)
   {
-    for (int j = 0; j < ny - 1; j++)
+    for (int j = 0; j < ny; j++)
     {
       S += (delta * delta) *
            (0.5 * ((V[i + 1][j] - V[i][j]) / delta) * ((V[i + 1][j] - V[i][j]) / delta) +
