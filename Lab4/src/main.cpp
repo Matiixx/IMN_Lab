@@ -111,6 +111,8 @@ void globalRelaxation()
     for (int j = 1; j < ny; j++)
       density[i][j] = rho(i, j);
 
+  const double dde = (delta * delta) / epsilon;
+  std::stringstream ss;
 
   for (const auto &omega_g : omega_G_array)
   {
@@ -124,8 +126,8 @@ void globalRelaxation()
 
     for (int j = 0; j <= nx; j++)
     {
-      Vs[j][0] = 10.0;
-      Vn[j][0] = 10.0;
+      Vs[j][0] = V1;
+      Vn[j][0] = V1;
     }
 
     std::stringstream ss;
@@ -138,13 +140,9 @@ void globalRelaxation()
     while (true)
     {
       for (int i = 1; i <= nx - 1; i++)
-      {
         for (int j = 1; j <= ny - 1; j++)
-        {
           Vn[i][j] = 0.25 * (Vs[i + 1][j] + Vs[i - 1][j] + Vs[i][j + 1] + Vs[i][j - 1] +
-                             ((delta * delta) / epsilon) * rho(i, j));
-        }
-      }
+                             dde * density[i][j]);
 
       for (int j = 1; j <= ny - 1; j++)
       {
@@ -153,17 +151,13 @@ void globalRelaxation()
       }
 
       for (int i = 0; i <= nx; i++)
-      {
         for (int j = 0; j <= ny; j++)
-        {
           Vs[i][j] = (1.0 - omega_g) * Vs[i][j] + omega_g * Vn[i][j];
-        }
-      }
 
       S_prev = S;
       S = calcS(Vn);
 
-      if (iter % 2000 == 0)
+      if (iter % 5000 == 0)
       {
         std::cout << "Omega: " << omega_g << " iter: " << iter << " S: " << S << " Stop: " << std::fabs((S - S_prev) / S_prev) << "\n";
       }
@@ -171,7 +165,10 @@ void globalRelaxation()
       saveToFile(filename, iter, S);
 
       if (std::fabs((S - S_prev) / S_prev) < TOL)
+      {
+        std::cout << "Omega: " << omega_g << " stop iteration at: " << iter << "\n";
         break;
+      }
 
       iter++;
     }
@@ -182,10 +179,10 @@ void globalRelaxation()
     filename = ss.str();
     clearFile(filename);
     for (int i = 0; i <= nx; i++)
-    {
       for (int j = 0; j <= ny; j++)
-      {
         saveToFile(filename, i * delta, j * delta, Vn[i][j]);
+  }
+}
       }
     }
   }
