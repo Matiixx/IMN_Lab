@@ -174,7 +174,20 @@ void mulitMeshRelaxation(const double &delta, const int &nx, const int &ny, cons
       iter++;
     }
     if (k != 1)
+    {
       thickenMesh(V, nx + 1, ny + 1, k);
+      setBorder(V, 0, 1, 0, ny + 1, [&y_max, &delta](double y)
+                { return std::sin(M_PI * delta * y / y_max); });
+      // VB2
+      setBorder2(V, 0, nx + 1, ny, ny + 1, [&x_max, &delta](double x)
+                 { return -1.0 * std::sin(2 * M_PI * delta * x / x_max); });
+      // VB3
+      setBorder(V, nx, nx + 1, 0, ny + 1, [&y_max, &delta](double y)
+                { return std::sin(M_PI * delta * y / y_max); });
+      // VB4
+      setBorder2(V, 0, nx + 1, 0, 1, [&x_max, &delta](double x)
+                 { return std::sin(2 * M_PI * delta * x / x_max); });
+    }
 
     k /= 2;
   }
