@@ -86,17 +86,15 @@ void printVector(std::vector<std::vector<double>> &vec)
 double calcS(const std::vector<std::vector<double>> &V)
 {
   double S{};
-  for (int i = 0; i < nx; i++)
-  {
-    for (int j = 0; j < ny; j++)
-    {
-      S += (delta * delta) *
+  const double dd = (delta * delta);
+  for (int i = 0; i <= nx - 1; i++)
+    for (int j = 0; j <= ny - 1; j++)
+      S += dd *
            (0.5 * ((V[i + 1][j] - V[i][j]) / delta) * ((V[i + 1][j] - V[i][j]) / delta) +
             0.5 * ((V[i][j + 1] - V[i][j]) / delta) * ((V[i][j + 1] - V[i][j]) / delta) -
             rho(i, j) *
                 V[i][j]);
-    }
-  }
+
   return S;
 }
 
@@ -163,19 +161,22 @@ void globalRelaxation()
       S_prev = S;
       S = calcS(Vn);
 
-      if (iter % 5000 == 0)
-      {
-        std::cout << "Omega: " << omega_g << " iter: " << iter << " S: " << S << " Stop: " << std::fabs((S - S_prev) / S_prev) << "\n";
-      }
+      std::cout << "\r" << std::flush
+                << "Omega: " << omega_g
+                << " iter: " << iter
+                << " S: " << S
+                << " Stop: " << std::fabs((S - S_prev) / S_prev);
 
       saveToFile(filename, iter, S);
 
       if (std::fabs((S - S_prev) / S_prev) < TOL)
       {
-        std::cout << "Omega: " << omega_g << " stop iteration at: " << iter << "\n";
+        std::cout << "\n"
+                  << std::flush
+                  << "Omega: " << omega_g
+                  << " stop iteration at: " << iter << "\n";
         break;
       }
-
       iter++;
     }
 
@@ -221,9 +222,7 @@ void localRelaxation()
     initVector(V);
 
     for (int j = 0; j <= nx; j++)
-    {
       V[j][0] = V1;
-    }
 
     ss.str("");
     ss.clear();
@@ -238,14 +237,10 @@ void localRelaxation()
     while (true)
     {
       for (int i = 1; i < nx; i++)
-      {
         for (int j = 1; j < ny; j++)
-        {
           V[i][j] = omega_min_1 * V[i][j] +
                     omega_4 *
                         (V[i + 1][j] + V[i - 1][j] + V[i][j - 1] + V[i][j + 1] + dde * density[i][j]);
-        }
-      }
 
       for (int j = 1; j < ny; j++)
       {
@@ -256,17 +251,22 @@ void localRelaxation()
       S_prev = S;
       S = calcS(V);
 
-      if (iter % 5000 == 0)
-        std::cout << "Omega: " << omega_g << " iter: " << iter << " S: " << S << " Stop: " << std::fabs((S - S_prev) / S_prev) << "\n";
+      std::cout << "\r" << std::flush
+                << "Omega: " << omega_g
+                << " iter: " << iter
+                << " S: " << S
+                << " Stop: " << std::fabs((S - S_prev) / S_prev);
 
       saveToFile(filename, iter, S);
 
       if (std::fabs((S - S_prev) / S_prev) < TOL)
       {
-        std::cout << "Omega: " << omega_g << " stop iteration at: " << iter << "\n";
+        std::cout << "\n"
+                  << std::flush
+                  << "Omega: " << omega_g
+                  << " stop iteration at: " << iter << "\n";
         break;
       }
-
       iter++;
     }
   }
