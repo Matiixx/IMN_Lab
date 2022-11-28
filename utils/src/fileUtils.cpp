@@ -44,3 +44,9 @@ void saveVectorToFile(const std::string &f, std::vector<std::vector<double>> &v,
 }
 
 void addEndLineToFile(const std::string &f)
+{
+  std::fstream file;
+  file.open(f, std::ios::app);
+  file << "\n";
+  file.close();
+}
