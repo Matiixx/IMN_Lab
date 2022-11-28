@@ -39,7 +39,15 @@
 //   file.close();
 // }
 
-// void initVector(std::vector<std::vector<double>> &vec, const double &v = 0.0)
+// void saveVectorToFile(const std::string &f, std::vector<std::vector<double>> &v, const int &nx, const int &ny, const double &delta, const int &k)
+// {
+//   clearFile(f);
+//   for (int i = 0; i <= nx - k; i += k)
+//     for (int j = 0; j <= ny - k; j += k)
+//       saveToFile(f, delta * i, delta * j, v[i][j]);
+// }
+
+// void initVector(std::vector<std::vector<double>> &vec, const int &nx, const int &ny, const double &v = 0.0)
 // {
 //   for (int i = 0; i <= nx; i++)
 //   {
@@ -101,7 +109,7 @@ double calcS(std::vector<std::vector<double>> &v, const int &nx, const int &ny, 
   return s;
 }
 
-void thickenMesh(std::vector<std::vector<double>> &v, const double &nx, const double &ny, const int &k)
+void thickenGrid(std::vector<std::vector<double>> &v, const double &nx, const double &ny, const int &k)
 {
   if (k != 1)
     for (int i = 0; i <= nx - k; i += k)
@@ -115,7 +123,7 @@ void thickenMesh(std::vector<std::vector<double>> &v, const double &nx, const do
       }
 }
 
-void mulitMeshRelaxation(const double &delta, const int &nx, const int &ny, const double &TOL, const int &startK)
+void multiMeshRelaxation(const double &delta, const int &nx, const int &ny, const double &TOL, const int &startK)
 {
   const double x_max = delta * nx,
                y_max = delta * ny;
@@ -148,7 +156,7 @@ void mulitMeshRelaxation(const double &delta, const int &nx, const int &ny, cons
     ss.str("");
     ss.clear();
 
-    ss << "mulitmesh_S_" << k << ".dat";
+    ss << "multimesh_S_" << k << ".dat";
     filename = ss.str();
     clearFile(filename);
 
@@ -158,24 +166,24 @@ void mulitMeshRelaxation(const double &delta, const int &nx, const int &ny, cons
 
       S_prev = S;
       S = calcS(V, nx, ny, delta, k);
-      // std::cout << "S: " << S << std::endl;
       saveToFile(filename, iter, S);
 
+      iter++;
       if (std::fabs((S - S_prev) / S_prev) < TOL)
       {
         std::cout << "k=" << k << " END AT: " << iter << "\n";
         ss.str("");
         ss.clear();
-        ss << "mulitmesh_V_" << k << ".dat";
+        ss << "multimesh_V_" << k << ".dat";
         filename = ss.str();
         saveVectorToFile(filename, V, nx + 1, ny + 1, delta, k);
         break;
       }
-      iter++;
     }
     if (k != 1)
     {
-      thickenMesh(V, nx + 1, ny + 1, k);
+      thickenGrid(V, nx + 1, ny + 1, k);
+      // VB1
       setBorder(V, 0, 1, 0, ny + 1, [&y_max, &delta](double y)
                 { return std::sin(M_PI * delta * y / y_max); });
       // VB2
@@ -195,6 +203,6 @@ void mulitMeshRelaxation(const double &delta, const int &nx, const int &ny, cons
 
 int main()
 {
-  mulitMeshRelaxation(0.2, 128, 128, 1e-8, 16);
+  multiMeshRelaxation(0.2, 128, 128, 1e-8, 16);
   return 0;
 }
