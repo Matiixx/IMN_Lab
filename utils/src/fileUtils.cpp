@@ -35,7 +35,12 @@ void saveToFile(const std::string &f, const double &a, const double &b, const do
 void saveVectorToFile(const std::string &f, std::vector<std::vector<double>> &v, const int &nx, const int &ny, const double &delta, const int &k)
 {
   clearFile(f);
-  for (int i = 0; i <= nx - k; i += k)
-    for (int j = 0; j <= ny - k; j += k)
+  for (int i = 0; i <= nx; i += k)
+  {
+    for (int j = 0; j <= ny; j += k)
       saveToFile(f, delta * i, delta * j, v[i][j]);
+    addEndLineToFile(f);
+  }
 }
+
+void addEndLineToFile(const std::string &f)
