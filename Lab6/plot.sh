@@ -1,52 +1,40 @@
-# set term jpeg size 1600,1200
+set term jpeg size 2400,1600
 
-# #S(it) global
-# set out "./results.jpeg"
-# set multiplot layout 2,3
+set out "./results.jpeg"
+set multiplot layout 2,3
 
+set pm3d
+set view map
+unset surface
 
-# #S(it)
-# set title "S(it, k)"
-# set xlabel "it"
-# set ylabel "S"
-# set autoscale xy
-# plot "multimesh_S_16.dat" u 1:2 w l lw 2 t 'k=16 it=0-80'   ,\
-#      "multimesh_S_8.dat"  u 1:2 w l lw 2 t 'k=8 it=81-213'  ,\
-#      "multimesh_S_4.dat"  u 1:2 w l lw 2 t 'k=4 it=214-371' ,\
-#      "multimesh_S_2.dat"  u 1:2 w l lw 2 t 'k=2 it=372-510' ,\
-#      "multimesh_S_1.dat"  u 1:2 w l lw 2 t 'k=1 it=511-516'
+set xlabel "x"
+set ylabel "y"
+set cbrange "v"
+set cbrange [-10:10]
 
-# # set ylabel "y"
-# # set xlabel "x"
-# set pm3d
-# set view map
-# unset surface
+set palette defined (-10 'blue', 0 'white', 10 'red')
 
-# # splot "mulitmesh_V_16.dat" u 1:2:3 w p pt 5 ps 1 palette
-# set xlabel "x"
-# set ylabel "y"
-# set zlabel "v"
-# set xrange [0:25.6]
-# set yrange [0:25.6]
+set title "nx=ny=50"
+splot "V5_50.dat" u 1:2:3 w p pt 5 ps 8 notitle
 
-# set palette defined (-1 'blue', 0 'white', 1 'red')
+set title "nx=ny=100"
+splot "V5_100.dat" u 1:2:3 w p pt 5 ps 8 notitle
 
-# set title "V_{k=16}(x,y)"
-# splot "multimesh_V_16.dat" u 1:2:3 w p pt 5 ps 8 notitle
-
-# set title "V_{k=8}(x,y)"
-# splot "multimesh_V_8.dat" u 1:2:3 w p pt 5 ps 8 notitle
-
-# set title "V_{k=4}(x,y)"
-# splot "multimesh_V_4.dat" u 1:2:3 w p pt 5 ps 8 notitle
-
-# set title "V_{k=2}(x,y)"
-# splot "multimesh_V_2.dat" u 1:2:3 w p pt 5 ps 8 notitle
-
-# set title "V_{k=1}(x,y)"
-# splot "multimesh_V_1.dat" u 1:2:3 w p pt 5 ps 8 notitle
-
-# # unset view map
+set title "nx=ny=200"
+splot "V5_200.dat" u 1:2:3 w p pt 5 ps 8 notitle
 
 
-# unset multiplot
+set cbrange [-0.8:0.8]
+set palette defined (-0.8 'blue', 0 'white', 0.8 'red')
+
+set title "nx=ny=100, e_1=1, e_2=1"
+splot "V6_1.dat" u 1:2:3 w p pt 5 ps 8 notitle
+
+set title "nx=ny=100, e_1=1, e_2=2"
+splot "V6_2.dat" u 1:2:3 w p pt 5 ps 8 notitle
+
+set title "nx=ny=100, e_1=1, e_2=10"
+splot "V6_10.dat" u 1:2:3 w p pt 5 ps 8 notitle
+
+
+unset multiplot
