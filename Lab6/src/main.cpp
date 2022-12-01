@@ -8,30 +8,30 @@
 #include <math.h>
 #include <sstream>
 
-const int nx = 50, ny = 50;
-
-const double delta = 0.1,
-             epsilon1 = 1.0,
-             epsilon2 = 1.0,
-             V1 = 10.0,
-             V2 = -10.0,
-             V3 = 10.0,
-             V4 = -10.0;
-
-double pow(const double &a)
+double square(const double &a)
 {
   return a * a;
 }
 
-double rho()
+double rho_part5(const double &x, const double &y, const double &x_max, const double &y_max, const double &sigma)
 {
   return 0.0;
 }
 
-// double rho1(const double &x, const double &y)
-// {
-//   return std::exp(-pow(x-0.25*)/());
-// }
+double rho1(const double &x, const double &y, const double &x_max, const double &y_max, const double &sigma)
+{
+  return std::exp(-square(x - 0.25 * x_max) / square(sigma) - square(y - 0.5 * y_max) / square(sigma));
+}
+
+double rho2(const double &x, const double &y, const double &x_max, const double &y_max, const double &sigma)
+{
+  return -std::exp(-square(x - 0.75 * x_max) / square(sigma) - square(y - 0.5 * y_max) / square(sigma));
+}
+
+double rho_part6(const double &x, const double &y, const double &x_max, const double &y_max, const double &sigma)
+{
+  return rho1(x, y, x_max, y_max, sigma) + rho2(x, y, x_max, y_max, sigma);
+}
 
 int getJFromL(const int &l, const int &nx)
 {
@@ -43,39 +43,47 @@ int getIFromL(const int &l, const int &nx)
   return l - getJFromL(l, nx) * (nx + 1);
 }
 
-double getEpsilon(const int &l, const int &nx)
+double getEpsilon(const int &l, const int &nx, const std::vector<double> &e)
 {
   if (getIFromL(l, nx) <= nx / 2)
-    return epsilon1;
-  return epsilon2;
+    return e[0];
+  return e[1];
 }
 
-double a_l_l_mnx_m1(const int &l, const double &delta, const int &nx)
+double a_l_l_mnx_m1(const int &l, const double &delta, const int &nx, const std::vector<double> &e)
 {
-  return getEpsilon(l, nx) / pow(delta);
+  return getEpsilon(l, nx, e) / square(delta);
 }
 
-double a_l_l_m1(const int &l, const double &delta, const int &nx)
+double a_l_l_m1(const int &l, const double &delta, const int &nx, const std::vector<double> &e)
 {
-  return getEpsilon(l, nx) / pow(delta);
+  return getEpsilon(l, nx, e) / square(delta);
 }
 
-double a_l_l(const int &l, const double &delta, const int &nx)
+double a_l_l(const int &l, const double &delta, const int &nx, const std::vector<double> &e)
 {
-  return -(2 * getEpsilon(l, nx) + getEpsilon(l + 1, nx) + getEpsilon(l + nx + 1, nx)) / pow(delta);
+  return -(2 * getEpsilon(l, nx, e) + getEpsilon(l + 1, nx, e) + getEpsilon(l + nx + 1, nx, e)) / square(delta);
 }
 
-double a_l_l_p1(const int &l, const double &delta, const int &nx)
+double a_l_l_p1(const int &l, const double &delta, const int &nx, const std::vector<double> &e)
 {
-  return getEpsilon(l + 1, nx) / pow(delta);
+  return getEpsilon(l + 1, nx, e) / square(delta);
 }
 
-double a_l_l_pnx_p1(const int &l, const double &delta, const int &nx)
+double a_l_l_pnx_p1(const int &l, const double &delta, const int &nx, const std::vector<double> &e)
 {
-  return getEpsilon(l + nx + 1, nx) / pow(delta);
+  return getEpsilon(l + nx + 1, nx, e) / square(delta);
 }
 
-void fillMatrices(const int &nx, const int &ny, const int &N, const std::vector<double> &VBorder, double *a, int *ia, int *ja, double *b)
+void fillMatrices(const int &nx, const int &ny,
+                  const int &N,
+                  const double &delta,
+                  const std::vector<double> &VBorder,
+                  const std::vector<double> &epsilon,
+                  double *a, int *ia, int *ja, double *b,
+                  const double &x_max, const double &y_max,
+                  const double &sigma,
+                  const std::function<double(const double &, const double &, const double &, const double &, const double &)> &rho)
 {
   int k = -1;
 
@@ -84,10 +92,12 @@ void fillMatrices(const int &nx, const int &ny, const int &N, const std::vector<
       j;
   double vb;
 
-  std::string filename1 = "matrixA_fill.dat";
-  std::string filename2 = "vectorB_fill.dat";
-  clearFile(filename1);
-  clearFile(filename2);
+  // std::stringstream filename1;
+  // filename1 << "matrixA_fill_" << nx << ".dat";
+  // std::stringstream filename2;
+  // filename2 << "vectorB_fill_" << nx << ".dat";
+  // clearFile(filename1.str());
+  // clearFile(filename2.str());
 
   for (int l = 0; l < N; l++)
   {
@@ -117,7 +127,7 @@ void fillMatrices(const int &nx, const int &ny, const int &N, const std::vector<
       vb = VBorder[3];
     }
 
-    b[l] = -(rho() + rho());
+    b[l] = -(rho(getIFromL(l, nx) * delta, getJFromL(l, nx) * delta, x_max, y_max, sigma));
 
     if (border)
       b[l] = vb;
@@ -129,7 +139,7 @@ void fillMatrices(const int &nx, const int &ny, const int &N, const std::vector<
       k++;
       if (ia[l] < 0)
         ia[l] = k;
-      a[k] = a_l_l_mnx_m1(l, delta, nx);
+      a[k] = a_l_l_mnx_m1(l, delta, nx, epsilon);
       ja[k] = l - nx - 1;
     }
 
@@ -138,7 +148,7 @@ void fillMatrices(const int &nx, const int &ny, const int &N, const std::vector<
       k++;
       if (ia[l] < 0)
         ia[l] = k;
-      a[k] = a_l_l_m1(l, delta, nx);
+      a[k] = a_l_l_m1(l, delta, nx, epsilon);
       ja[k] = l - 1;
     }
 
@@ -146,7 +156,7 @@ void fillMatrices(const int &nx, const int &ny, const int &N, const std::vector<
     if (ia[l] < 0)
       ia[l] = k;
     if (border == false)
-      a[k] = a_l_l(l, delta, nx);
+      a[k] = a_l_l(l, delta, nx, epsilon);
     else
       a[k] = 1;
     ja[k] = l;
@@ -154,19 +164,19 @@ void fillMatrices(const int &nx, const int &ny, const int &N, const std::vector<
     if (l < N && border == false)
     {
       k++;
-      a[k] = a_l_l_p1(l, delta, nx);
+      a[k] = a_l_l_p1(l, delta, nx, epsilon);
       ja[k] = l + 1;
     }
 
     if (l < N - nx - 1 && border == false)
     {
       k++;
-      a[k] = a_l_l_pnx_p1(l, delta, nx);
+      a[k] = a_l_l_pnx_p1(l, delta, nx, epsilon);
       ja[k] = l + nx + 1;
     }
 
-    saveToFile(filename1, l, getIFromL(l, nx), getJFromL(l, nx), a[l]);
-    saveToFile(filename2, l, getIFromL(l, nx), getJFromL(l, nx), b[l]);
+    // saveToFile(filename1.str(), l, getIFromL(l, nx), getJFromL(l, nx), a[l]);
+    // saveToFile(filename2.str(), l, getIFromL(l, nx), getJFromL(l, nx), b[l]);
   }
   ia[N] = k + 1;
 }
@@ -176,13 +186,20 @@ void saveVectorToFile(const std::string &f, const double *V, const int &N, const
   clearFile(f);
   for (int l = 0; l < N; l++)
   {
-    saveToFile(f, getIFromL(l, nx), getJFromL(l, nx), V[l]);
+    saveToFile(f, getIFromL(l, nx) * 0.1, getJFromL(l, nx) * 0.1, V[l]);
     if (getIFromL(l, nx) == nx)
       addEndLineToFile(f);
   }
 }
 
-void poissonEqationAlgebraic(const int &nx, const int &ny, const double &delta, const std::vector<double> &epsilon, const std::vector<double> &VBorder)
+void poissonEqationAlgebraic(const int &nx, const int &ny,
+                             const double &delta,
+                             const std::vector<double> &epsilon,
+                             const std::vector<double> &VBorder,
+                             const double &x_max, const double &y_max,
+                             const double &sigma,
+                             const std::function<double(const double &, const double &, const double &, const double &, const double &)> &rho,
+                             const std::string &filename)
 {
   const int N = (nx + 1) * (ny + 1);
   double *a = new double[N * 5];
@@ -195,11 +212,14 @@ void poissonEqationAlgebraic(const int &nx, const int &ny, const double &delta, 
     ia[i] = -1;
   }
 
-  fillMatrices(nx, ny, N, VBorder, a, ia, ja, b);
+  fillMatrices(nx, ny, N, delta, VBorder, epsilon, a, ia, ja, b, x_max, y_max, sigma, rho);
 
   pmgmres_ilu_cr(N, ia[N], ia, ja, a, V, b, 500, 500, 1e-8, 1e-8);
 
-  saveVectorToFile("V_50.dat", V, N, nx);
+  // std::stringstream ss;
+  // ss << "V_" << nx << ".dat";
+
+  saveVectorToFile(filename, V, N, nx);
 
   delete a;
   delete ja;
@@ -211,6 +231,54 @@ void poissonEqationAlgebraic(const int &nx, const int &ny, const double &delta, 
 int main()
 {
 
-  poissonEqationAlgebraic(50, 50, delta, {epsilon1, epsilon2}, {V1, V2, V3, V4});
+  // 5
+  int nx = 50, ny = 50;
+
+  double delta = 0.1,
+         epsilon1 = 1.0,
+         epsilon2 = 1.0,
+         V1 = 10.0,
+         V2 = -10.0,
+         V3 = 10.0,
+         V4 = -10.0,
+         x_max = delta * nx,
+         y_max = delta * ny,
+         sigma = x_max / 10.0;
+
+  // 5A
+  poissonEqationAlgebraic(nx, ny, delta, {epsilon1, epsilon2}, {V1, V2, V3, V4}, x_max, y_max, sigma, rho_part5, "V5_50.dat");
+  // 5B
+  nx = ny = 100;
+  x_max = delta * nx;
+  y_max = delta * ny;
+  sigma = x_max / 10.0;
+  poissonEqationAlgebraic(nx, ny, delta, {epsilon1, epsilon2}, {V1, V2, V3, V4}, x_max, y_max, sigma, rho_part5, "V5_100.dat");
+  // 5C
+  nx = ny = 200;
+  x_max = delta * nx;
+  y_max = delta * ny;
+  sigma = x_max / 10.0;
+  poissonEqationAlgebraic(nx, ny, delta, {epsilon1, epsilon2}, {V1, V2, V3, V4}, x_max, y_max, sigma, rho_part5, "V5_200.dat");
+
+  // 6
+  nx = ny = 100;
+  x_max = delta * nx;
+  y_max = delta * ny;
+  sigma = x_max / 10.0;
+  V1 = V2 = V3 = V4 = 0.0;
+
+  // 6A
+  epsilon1 = 1.0;
+  epsilon2 = 1.0;
+  poissonEqationAlgebraic(nx, ny, delta, {epsilon1, epsilon2}, {V1, V2, V3, V4}, x_max, y_max, sigma, rho_part6, "V6_1.dat");
+  // 6B
+  epsilon1 = 1.0;
+  epsilon2 = 2.0;
+  poissonEqationAlgebraic(nx, ny, delta, {epsilon1, epsilon2}, {V1, V2, V3, V4}, x_max, y_max, sigma, rho_part6, "V6_2.dat");
+  // 6C
+  epsilon1 = 1.0;
+  epsilon2 = 10.0;
+  poissonEqationAlgebraic(nx, ny, delta, {epsilon1, epsilon2}, {V1, V2, V3, V4}, x_max, y_max, sigma, rho_part6, "V6_10.dat");
+
   return 0;
 }
