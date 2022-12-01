@@ -32,7 +32,7 @@ void saveToFile(const std::string &f, const double &a, const double &b, const do
   file.close();
 }
 
-void saveVectorToFile(const std::string &f, std::vector<std::vector<double>> &v, const int &nx, const int &ny, const double &delta, const int &k)
+void saveVector2DToFile(const std::string &f, std::vector<std::vector<double>> &v, const int &nx, const int &ny, const double &delta, const int &k)
 {
   clearFile(f);
   for (int i = 0; i <= nx; i += k)
