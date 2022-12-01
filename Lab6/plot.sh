@@ -9,7 +9,7 @@ unset surface
 
 set xlabel "x"
 set ylabel "y"
-set cbrange "v"
+set cblabel "V"
 set cbrange [-10:10]
 
 set palette defined (-10 'blue', 0 'white', 10 'red')
