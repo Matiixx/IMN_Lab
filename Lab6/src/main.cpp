@@ -5,6 +5,7 @@
 #include <functional>
 #include <fstream>
 #include <vector>
+#include <chrono>
 #include <math.h>
 #include <sstream>
 
@@ -127,7 +128,7 @@ void fillMatrices(const int &nx, const int &ny,
       vb = VBorder[3];
     }
 
-    b[l] = -(rho(getIFromL(l, nx) * delta, getJFromL(l, nx) * delta, x_max, y_max, sigma));
+    b[l] = -(rho(i * delta, j * delta, x_max, y_max, sigma));
 
     if (border)
       b[l] = vb;
@@ -184,10 +185,13 @@ void fillMatrices(const int &nx, const int &ny,
 void saveVectorToFile(const std::string &f, const double *V, const int &N, const int &nx)
 {
   clearFile(f);
+  int i, j;
   for (int l = 0; l < N; l++)
   {
-    saveToFile(f, getIFromL(l, nx) * 0.1, getJFromL(l, nx) * 0.1, V[l]);
-    if (getIFromL(l, nx) == nx)
+    i = getIFromL(l, nx);
+    j = getJFromL(l, nx);
+    saveToFile(f, i * 0.1, j * 0.1, V[l]);
+    if (i == nx)
       addEndLineToFile(f);
   }
 }
@@ -207,17 +211,10 @@ void poissonEqationAlgebraic(const int &nx, const int &ny,
   int *ia = new int[N + 1];
   double *b = new double[N];
   double *V = new double[N];
-  for (int i = 0; i < N + 1; i++)
-  {
-    ia[i] = -1;
-  }
 
   fillMatrices(nx, ny, N, delta, VBorder, epsilon, a, ia, ja, b, x_max, y_max, sigma, rho);
 
   pmgmres_ilu_cr(N, ia[N], ia, ja, a, V, b, 500, 500, 1e-8, 1e-8);
-
-  // std::stringstream ss;
-  // ss << "V_" << nx << ".dat";
 
   saveVectorToFile(filename, V, N, nx);
 
@@ -230,7 +227,7 @@ void poissonEqationAlgebraic(const int &nx, const int &ny,
 
 int main()
 {
-
+  auto begin = std::chrono::high_resolution_clock::now();
   // 5
   int nx = 50, ny = 50;
 
@@ -279,6 +276,10 @@ int main()
   epsilon1 = 1.0;
   epsilon2 = 10.0;
   poissonEqationAlgebraic(nx, ny, delta, {epsilon1, epsilon2}, {V1, V2, V3, V4}, x_max, y_max, sigma, rho_part6, "V6_10.dat");
+
+  auto end = std::chrono::high_resolution_clock::now();
+  auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(end - begin);
+  std::cout << "Time elapsed: " << elapsed.count() << "sec\n";
 
   return 0;
 }

@@ -1278,7 +1278,7 @@ void pmgmres_ilu_cr(int n, int nz_num, int ia[], int ja[], double a[],
   double *s;
   int *ua;
   double **v;
-  int verbose = 1;
+  bool verbose = 0;
   double *y;
 
   itr_used = 0;
