@@ -165,6 +165,16 @@ void calcUxy(double **u, double **psi, const int &nx, const int &ny, const doubl
   }
 }
 
+void calcVxy(double **v, double **psi, const int &nx, const int &ny, const double &delta)
+{
+
+  for (int i = 1; i <= nx - 1; i++)
+  {
+    for (int j = 1; j <= ny - 1; j++)
+      v[i][j] = -(psi[i + 1][j] - psi[i][j]) / delta;
+  }
+}
+
 void relaxation(double **psi, double **dzeta, const int &nx, const int &ny, const int &i1, const int &j1, const int &IT_MAX,
                 const double &delta, const double &rho, const double &mi, const double &qin)
 {
@@ -214,32 +224,41 @@ void navierStokesEquation(
   double **psi = new double *[nx + 1];
   double **dzeta = new double *[nx + 1];
   double **u_xy = new double *[nx + 1];
+  double **v_xy = new double *[nx + 1];
   for (int i = 0; i <= nx; i++)
   {
     psi[i] = new double[ny + 1];
     dzeta[i] = new double[ny + 1];
     u_xy[i] = new double[ny + 1];
+    v_xy[i] = new double[ny + 1];
   }
 
   relaxation(psi, dzeta, nx, ny, i1, j1, IT_MAX, delta, rho, mi, qin);
 
   calcUxy(u_xy, psi, nx, ny, delta);
+  calcVxy(v_xy, psi, nx, ny, delta);
 
   std::stringstream ss;
-  ss << -qin << "_psi.dat";
+  ss << qin << "_psi.dat";
   std::string filename = ss.str();
   ss.str("");
   ss.clear();
-  ss << -qin << "_dzeta.dat";
+  ss << qin << "_dzeta.dat";
   std::string filename2 = ss.str();
   ss.str("");
   ss.clear();
-  ss << -qin << "_u.dat";
+  ss << qin << "_u.dat";
   std::string filename3 = ss.str();
+  ss.str("");
+  ss.clear();
+  ss << qin << "_v.dat";
+  std::string filename4 = ss.str();
 
   clearFile(filename);
   clearFile(filename2);
   clearFile(filename3);
+  clearFile(filename4);
+
   for (int i = 0; i <= nx; i++)
   {
     for (int j = 0; j <= ny; j++)
@@ -247,10 +266,12 @@ void navierStokesEquation(
       saveToFile(filename, i * delta, j * delta, psi[i][j]);
       saveToFile(filename2, i * delta, j * delta, dzeta[i][j]);
       saveToFile(filename3, i * delta, j * delta, u_xy[i][j]);
+      saveToFile(filename4, i * delta, j * delta, v_xy[i][j]);
     }
     addEndLineToFile(filename);
     addEndLineToFile(filename2);
     addEndLineToFile(filename3);
+    addEndLineToFile(filename4);
   }
 
   for (int i = 0; i <= nx; i++)
@@ -258,8 +279,10 @@ void navierStokesEquation(
     delete[] psi[i];
     delete[] dzeta[i];
     delete[] u_xy[i];
+    delete[] v_xy[i];
   }
   delete[] u_xy;
+  delete[] v_xy;
   delete[] psi;
   delete[] dzeta;
 }
@@ -277,6 +300,14 @@ int main()
 
   // 4
   double qin = -1000.0;
+  navierStokesEquation(nx, ny, i1, j1, IT_MAX, delta, rho, mi, qin);
+
+  // 5
+  qin = -4000.0;
+  navierStokesEquation(nx, ny, i1, j1, IT_MAX, delta, rho, mi, qin);
+
+  // 6
+  qin = 4000.0;
   navierStokesEquation(nx, ny, i1, j1, IT_MAX, delta, rho, mi, qin);
 
   auto end = std::chrono::high_resolution_clock::now();
