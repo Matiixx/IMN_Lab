@@ -7,7 +7,7 @@
 #
 
 reset
-set term png size 1600, 2400 enhanced # font "Helvetica, 18" lw 2
+set term png size 3200, 4800 enhanced # font "Helvetica, 18" lw 2
 #set size 1,1
 #set size square
 
@@ -54,7 +54,7 @@ splot [0:2][0:0.9][-54.5:-50.5] "wyn.dat" u 1:2:3 w l palette notitle
 set title 'Funkcja wirowosci ksi(x,y) Q=-1000'
 set xlabel 'x'
 set ylabel 'y'
-set cntrparam levels increment -200,20,350
+set cntrparam levels increment -200,10,350
 
 splot [0:2][0:0.9][-200:350] "wyn.dat" u 1:2:4 w l palette notitle
 ###########################################################
