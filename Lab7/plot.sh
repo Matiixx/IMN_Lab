@@ -1,4 +1,4 @@
-set term jpeg size 1600,2400
+set term jpeg size 2000,3200
 
 set out "./results.jpeg"
 set multiplot layout 5,2
