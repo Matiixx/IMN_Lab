@@ -32,6 +32,14 @@ void saveToFile(const std::string &f, const double &a, const double &b, const do
   file.close();
 }
 
+void saveToFile(const std::string &fn, const double &a, const double &b, const double &c, const double &d, const double &e, const double &f)
+{
+  std::fstream file;
+  file.open(fn, std::ios::app);
+  file << a << " " << b << " " << c << " " << d << " " << e << " " << f << "\n";
+  file.close();
+}
+
 void saveVector2DToFile(const std::string &f, std::vector<std::vector<double>> &v, const int &nx, const int &ny, const double &delta, const int &k)
 {
   clearFile(f);
