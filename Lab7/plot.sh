@@ -7,7 +7,7 @@
 #
 
 reset
-set term png size 3200, 4800 enhanced # font "Helvetica, 18" lw 2
+set term png size 3200, 4800 enhanced font "Helvetica, 18" lw 2
 #set size 1,1
 #set size square
 
