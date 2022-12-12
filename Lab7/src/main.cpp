@@ -219,7 +219,8 @@ void relaxation(double **psi, double **dzeta, const int &nx, const int &ny, cons
 
 void navierStokesEquation(
     const int &nx, const int &ny, const int &i1, const int &j1, const int &IT_MAX,
-    const double &delta, const double &rho, const double &mi, const double &qin)
+    const double &delta, const double &rho, const double &mi, const double &qin,
+    const std::string &filename)
 {
   double **psi = new double *[nx + 1];
   double **dzeta = new double *[nx + 1];
@@ -238,49 +239,11 @@ void navierStokesEquation(
   calcUxy(u_xy, psi, nx, ny, delta);
   calcVxy(v_xy, psi, nx, ny, delta);
 
-  // std::stringstream ss;
-  // ss << qin << "_psi.dat";
-  // std::string filename = ss.str();
-  // ss.str("");
-  // ss.clear();
-  // ss << qin << "_dzeta.dat";
-  // std::string filename2 = ss.str();
-  // ss.str("");
-  // ss.clear();
-  // ss << qin << "_u.dat";
-  // std::string filename3 = ss.str();
-  // ss.str("");
-  // ss.clear();
-  // ss << qin << "_v.dat";
-  // std::string filename4 = ss.str();
-
-  // clearFile(filename);
-  // clearFile(filename2);
-  // clearFile(filename3);
-  // clearFile(filename4);
-  std::string filename;
-  if (qin == -1000)
-    filename = "wyn.dat";
-  else if (qin == -4000)
-    filename = "wyn_Qm4000.dat";
-  else
-    filename = "wyn_Q4000.dat";
-  clearFile(filename);
-
   for (int i = 0; i <= nx; i++)
   {
     for (int j = 0; j <= ny; j++)
-    {
-      // saveToFile(filename, i * delta, j * delta, psi[i][j]);
-      // saveToFile(filename2, i * delta, j * delta, dzeta[i][j]);
-      // saveToFile(filename3, i * delta, j * delta, u_xy[i][j]);
-      // saveToFile(filename4, i * delta, j * delta, v_xy[i][j]);
-      saveToFile(filename, i * delta, j * delta, psi[i][j], dzeta[i][j], u_xy[i][j], v_xy[i][j]);
-    }
+      saveToFile(filename, {i * delta, j * delta, psi[i][j], dzeta[i][j], u_xy[i][j], v_xy[i][j]});
     addEndLineToFile(filename);
-    // addEndLineToFile(filename2);
-    // addEndLineToFile(filename3);
-    // addEndLineToFile(filename4);
   }
 
   for (int i = 0; i <= nx; i++)
@@ -309,15 +272,15 @@ int main()
 
   // 4
   double qin = -1000.0;
-  navierStokesEquation(nx, ny, i1, j1, IT_MAX, delta, rho, mi, qin);
+  navierStokesEquation(nx, ny, i1, j1, IT_MAX, delta, rho, mi, qin, "wyn.dat");
 
   // 5
   qin = -4000.0;
-  navierStokesEquation(nx, ny, i1, j1, IT_MAX, delta, rho, mi, qin);
+  navierStokesEquation(nx, ny, i1, j1, IT_MAX, delta, rho, mi, qin, "wyn_Qm4000.dat");
 
   // 6
   qin = 4000.0;
-  navierStokesEquation(nx, ny, i1, j1, IT_MAX, delta, rho, mi, qin);
+  navierStokesEquation(nx, ny, i1, j1, IT_MAX, delta, rho, mi, qin, "wyn_Q4000.dat");
 
   auto end = std::chrono::high_resolution_clock::now();
   auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(end - begin);
