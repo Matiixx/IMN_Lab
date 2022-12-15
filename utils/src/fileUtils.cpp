@@ -51,6 +51,21 @@ void saveVector2DToFile(const std::string &f, std::vector<std::vector<double>> &
   }
 }
 
+void loadFromFile(const std::string &filename, double **array, const int &nx, const int &ny)
+{
+  std::fstream file;
+  file.open(filename, std::ios::in);
+  double a, b, c;
+  for (int i = 0; i <= nx; i++)
+    for (int j = 0; j <= ny; j++)
+    {
+      file >> a >> b >> c;
+      array[i][j] = c;
+    }
+
+  file.close();
+}
+
 void addEndLineToFile(const std::string &f)
 {
   std::fstream file;

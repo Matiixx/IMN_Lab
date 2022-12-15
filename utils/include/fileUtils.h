@@ -12,6 +12,7 @@ void saveToFile(const std::string &, const double &, const double &, const doubl
 void saveToFile(const std::string &, const double &, const double &, const double &, const double &, const double &, const double &);
 void saveVector2DToFile(const std::string &, std::vector<std::vector<double>> &, const int &, const int &, const double &, const int &);
 void addEndLineToFile(const std::string &f);
+void loadFromFile(const std::string &, double **, const int &, const int &);
 
 template <typename T>
 void saveToFile(const std::string &filename, std::initializer_list<T> list)
