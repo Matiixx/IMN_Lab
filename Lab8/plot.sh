@@ -7,7 +7,7 @@
 # #
 
 # reset
-set term png size 3200, 4800 
+set term png size 3200, 6400 
 # set size 1,1
 # #set size square
 
@@ -19,7 +19,7 @@ set term png size 3200, 4800
 
 set out "res.png"
 set grid
-set multiplot layout 5,2
+set multiplot layout 7,2
 
 # set grid
 # unset grid
@@ -40,7 +40,10 @@ set title 'Mapa predkosci v_x'
 set xlabel 'x'
 set ylabel 'y'
 
-set palette rgbformulae 33,13,10 # paleta kolorow
+# set palette rgbformulae 33,13,10 # paleta kolorow
+# set palette rgbformulae 7,5,15
+set palette rgbformulae 22,13,-31
+
 
 splot [0:4][0:0.9][-5:45] "v.dat" u 1:2:3 w p pt 5 ps 8 palette notitle
 # ###########################################################
@@ -71,88 +74,73 @@ plot "c_xsr_0.dat" u 1:3 w l lw 2 t "D=0.0", "c_xsr_0.1.dat" u 1:3 w l lw 2 t "D
 set pm3d
 set view map
 unset surface
-
-set title 'D=0 u(x,y) it=2000, t=0.113947'
+# set palette rgbformulae 22,13,-31
+# ###########################################################
+# set cbrange[0:18]
+set title 'D=0 u(x,y) it=2000, t=0.1139'
 set xlabel 'x'
 set ylabel 'y'
 
-set palette rgbformulae 33,13,10 # paleta kolorow
-
 splot [0:400][0:90][0:18] "map_u_2000_0.dat" u 1:2:3 w p pt 5 ps 8 palette notitle
+# set title 'D=0 u(x,y) it=2000, t=0.113947'
+# set xlabel 'x'
+# set ylabel 'y'
+
+# splot [0:400][0:90][0:18] "map_u_2000_0.dat" u 1:2:3 w p pt 5 ps 8 palette notitle
 # ###########################################################
 set title 'D=0.1 u(x,y) it=2000, t=0.113947'
 set xlabel 'x'
 set ylabel 'y'
 
-set palette rgbformulae 33,13,10 # paleta kolorow
-
 splot [0:400][0:90][0:4] "map_u_2000_0.1.dat" u 1:2:3 w p pt 5 ps 8 palette notitle
 # ###########################################################
-# set title 'Funkcja strumienia Psi(x,y) Q=-4000'
-# set xlabel 'x'
-# set ylabel 'y'
-# #unset key
-# unset ztics
-# set contour base
-# # set cntrparam level 500
-# set cntrparam levels increment -218,0.5,-202
-# #unset surface
-# #set view equal
-# #set view 0,0
+set title 'D=0 u(x,y) it=4000, t=0.2278940'
+set xlabel 'x'
+set ylabel 'y'
 
-# splot [0:2][0:0.9][-218:-202] "wyn_Qm4000.dat" u 1:2:3 w l palette notitle
+splot [0:400][0:90][0:18] "map_u_4000_0.dat" u 1:2:3 w p pt 5 ps 8 palette notitle
 # ###########################################################
-# set title 'Funkcja wirowosci ksi(x,y) Q=-4000'
-# set xlabel 'x'
-# set ylabel 'y'
-# set cntrparam levels increment -800,40,1200
+set title 'D=0.1 u(x,y) it=4000, t=0.113947'
+set xlabel 'x'
+set ylabel 'y'
 
-# splot [0:2][0:0.9][-800:1200] "wyn_Qm4000.dat" u 1:2:4 w l palette notitle
+splot [0:400][0:90][0:2.5] "map_u_4000_0.1.dat" u 1:2:3 w p pt 5 ps 8 palette notitle
 # ###########################################################
-# unset pm3d
-# set pm3d
-# unset surface
-# unset contour
-# #unset cntrparam level
-# #set palette defined (-10 "blue", 0 "white", 70 "red")
+set title 'D=0 u(x,y) it=6000, t=0.3418410'
+set xlabel 'x'
+set ylabel 'y'
 
-# set title 'Pozioma skladowa predkosci u(x,y) Q=-4000'
-# set xlabel 'x'
-# set ylabel 'y'
-
-# splot [0:2][0:0.9][-10:70] "wyn_Qm4000.dat" u 1:2:5 notitle
+splot [0:400][0:90][0:18] "map_u_6000_0.dat" u 1:2:3 w p pt 5 ps 8 palette notitle
 # ###########################################################
-# #set palette defined (-14 "blue", 0 "white", 4 "red")
-# set title 'Pionowa skladowa predkosci v(x,y) Q=-4000'
-# set xlabel 'x'
-# set ylabel 'y'
+set title 'D=0.1 u(x,y) it=6000, t=0.113947'
+set xlabel 'x'
+set ylabel 'y'
 
-# splot [0:2][0:0.9][-14:4] "wyn_Qm4000.dat" u 1:2:6 notitle
-
-
+splot [0:400][0:90][0:1.2] "map_u_6000_0.1.dat" u 1:2:3 w p pt 5 ps 8 palette notitle
 # ###########################################################
-# unset pm3d
-# #set palette rgbformulae 33,13,10 # paleta kolorow
+set title 'D=0 u(x,y) it=8000, t=0.4557890'
+set xlabel 'x'
+set ylabel 'y'
 
-# set title 'Funkcja strumienia Psi(x,y) Q=4000'
-# set xlabel 'x'
-# set ylabel 'y'
-# #unset key
-# unset ztics
-# set contour base
-# # set cntrparam level 500
-# set cntrparam levels increment 202,0.5,218
-# #unset surface
-# #set view equal
-# #set view 0,0
+splot [0:400][0:90][0:18] "map_u_8000_0.dat" u 1:2:3 w p pt 5 ps 8 palette notitle
+# ###########################################################
+set title 'D=0.1 u(x,y) it=8000, t=0.113947'
+set xlabel 'x'
+set ylabel 'y'
 
-# splot [0:2][0:0.9][202:218] "wyn_Q4000.dat" u 1:2:3 w l palette notitle
-# ##############################################################
-# #set title 'Funkcja wirowosci ksi(x,y) Q=4000'################
-# #set xlabel 'x'
-# #set ylabel 'y'
+splot [0:400][0:90][0:0.8] "map_u_8000_0.1.dat" u 1:2:3 w p pt 5 ps 8 palette notitle
+# ###########################################################
+set title 'D=0 u(x,y) it=10000, t=0.5697360'
+set xlabel 'x'
+set ylabel 'y'
 
-# #splot [0:2][0:0.9] "wyn_Q4000.dat" u 1:2:4 w l palette notitle
+splot [0:400][0:90][0:18] "map_u_10000_0.dat" u 1:2:3 w p pt 5 ps 8 palette notitle
+# ###########################################################
+set title 'D=0.1 u(x,y) it=10000, t=0.113947'
+set xlabel 'x'
+set ylabel 'y'
+
+splot [0:400][0:90][0:0.5] "map_u_10000_0.1.dat" u 1:2:3 w p pt 5 ps 8 palette notitle
 
 
 unset multiplot
