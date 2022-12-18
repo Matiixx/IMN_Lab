@@ -207,7 +207,7 @@ void advectionDiffusionEquation(const int &nx, const int &ny, const int &i1, con
       for (int i = 0; i <= nx; i++)
       {
         for (int j = 0; j <= ny; j++)
-          saveToFile(fileMap, {(double)i, (double)j, u[i][j] < 0.0 ? 0.0 : u[i][j]});
+          saveToFile(fileMap, {(double)i, (double)j, u[i][j]});
         addEndLineToFile(fileMap);
       }
       k++;

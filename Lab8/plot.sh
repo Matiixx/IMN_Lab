@@ -81,7 +81,7 @@ set title 'D=0 u(x,y) it=2000, t=0.1139'
 set xlabel 'x'
 set ylabel 'y'
 
-splot [0:400][0:90][0:18] "map_u_2000_0.dat" u 1:2:3 w p pt 5 ps 8 palette notitle
+splot [0:400][0:90] "map_u_2000_0.dat" u 1:2:3 w p pt 5 ps 8 palette notitle
 # set title 'D=0 u(x,y) it=2000, t=0.113947'
 # set xlabel 'x'
 # set ylabel 'y'
@@ -98,7 +98,8 @@ set title 'D=0 u(x,y) it=4000, t=0.2278940'
 set xlabel 'x'
 set ylabel 'y'
 
-splot [0:400][0:90][0:18] "map_u_4000_0.dat" u 1:2:3 w p pt 5 ps 8 palette notitle
+# splot [0:400][0:90][0:18] "map_u_4000_0.dat" u 1:2:3 w p pt 5 ps 8 palette notitle
+splot [0:400][0:90] "map_u_4000_0.dat" u 1:2:3 w p pt 5 ps 8 palette notitle
 # ###########################################################
 set title 'D=0.1 u(x,y) it=4000, t=0.113947'
 set xlabel 'x'
@@ -110,7 +111,8 @@ set title 'D=0 u(x,y) it=6000, t=0.3418410'
 set xlabel 'x'
 set ylabel 'y'
 
-splot [0:400][0:90][0:18] "map_u_6000_0.dat" u 1:2:3 w p pt 5 ps 8 palette notitle
+# splot [0:400][0:90][0:18] "map_u_6000_0.dat" u 1:2:3 w p pt 5 ps 8 palette notitle
+splot [0:400][0:90] "map_u_6000_0.dat" u 1:2:3 w p pt 5 ps 8 palette notitle
 # ###########################################################
 set title 'D=0.1 u(x,y) it=6000, t=0.113947'
 set xlabel 'x'
@@ -122,7 +124,8 @@ set title 'D=0 u(x,y) it=8000, t=0.4557890'
 set xlabel 'x'
 set ylabel 'y'
 
-splot [0:400][0:90][0:18] "map_u_8000_0.dat" u 1:2:3 w p pt 5 ps 8 palette notitle
+# splot [0:400][0:90][0:18] "map_u_8000_0.dat" u 1:2:3 w p pt 5 ps 8 palette notitle
+splot [0:400][0:90] "map_u_8000_0.dat" u 1:2:3 w p pt 5 ps 8 palette notitle
 # ###########################################################
 set title 'D=0.1 u(x,y) it=8000, t=0.113947'
 set xlabel 'x'
@@ -134,7 +137,8 @@ set title 'D=0 u(x,y) it=10000, t=0.5697360'
 set xlabel 'x'
 set ylabel 'y'
 
-splot [0:400][0:90][0:18] "map_u_10000_0.dat" u 1:2:3 w p pt 5 ps 8 palette notitle
+# splot [0:400][0:90][0:18] "map_u_10000_0.dat" u 1:2:3 w p pt 5 ps 8 palette notitle
+splot [0:400][0:90] "map_u_10000_0.dat" u 1:2:3 w p pt 5 ps 8 palette notitle
 # ###########################################################
 set title 'D=0.1 u(x,y) it=10000, t=0.113947'
 set xlabel 'x'
